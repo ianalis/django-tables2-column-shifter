@@ -28,7 +28,7 @@
                         {% if column.attrs.td.class not in table.get_column_excluded %}
                             {% if column.attrs.td.class in table.get_column_default_show %}
                                 <li class="btn-shift-column"
-                                    data-td-class="{{ column.attrs.td.class }}"
+                                    data-td-class="{{ column.name }}"
                                     data-state="on"
                                     {% if not forloop.last %} style="border-bottom:1px solid #ccc;" {%endif %}
                                     data-table-class-container="{{ table.uniq_table_class_name }}">
@@ -48,7 +48,7 @@
                                 </li>
                             {% else %}
                                 <li class="btn-shift-column"
-                                    data-td-class="{{ column.attrs.td.class }}"
+                                    data-td-class="{{ column.name }}"
                                     data-state="off"
                                     {% if not forloop.last %} style="border-bottom:1px solid #ccc;" {%endif %}
                                     data-table-class-container="{{ table.uniq_table_class_name }}">

@@ -239,3 +239,41 @@ class DjangoTables2ColumnShifterTest(TestCase):
             self.assertTrue('data-td-class="age"' in render)
             self.assertFalse('data-td-class="first_name"' in render)
             self.assertFalse('data-td-class="last_name"' in render)
+
+    def test_class_attrs(self):
+        """
+        Class for targeting should be col name even if class defined in attrs
+        """
+
+        for case in self.CASE:
+
+            if (
+                case["min_dt_version"] and case["min_dt_version"] > dt_version
+            ) or (
+                case["max_dt_version"] and case["max_dt_version"] < dt_version
+            ):
+                continue
+
+            class Tab(case["table_clsss"]):
+                first_name = tables.Column(
+                    attrs={
+                        "th": {"class": "text-nowrap"},
+                        "td": {"class": "text-center"},
+                    }
+                )
+
+                class Meta:
+                    model = Author
+
+            table = Tab(Author.objects.all())
+            request = RequestFactory().get("/fake/url")
+            template = Template(
+                """
+                {% load django_tables2 %}
+                {% render_table table %}
+            """
+            )
+            ctx = Context({"table": table, "request": request})
+            render = template.render(ctx)
+
+            self.assertTrue('data-td-class="first_name"' in render)
